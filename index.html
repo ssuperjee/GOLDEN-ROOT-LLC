@@ -435,12 +435,12 @@
         font-weight: 700;
         text-align: center;
         cursor: pointer;
-        transition:
+        /* transition:
           transform 0.22s ease,
           border-color 0.22s ease,
           background-color 0.22s ease,
           color 0.22s ease,
-          box-shadow 0.22s ease;
+          box-shadow 0.22s ease; */
       }
 
       .tab-btn i {
@@ -471,12 +471,19 @@
         display: none;
         align-items: center;
         gap: 48px;
-        animation: rise 0.3s ease;
+        overflow: hidden;
+      }
+
+      .tab-panel.is-collapsing {
+        display: grid;
+        grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+        transition: height 0.56s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       .tab-panel.is-active {
         display: grid;
         grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+        animation: panel-slide 0.56s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       .phone-stage {
@@ -551,6 +558,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
         margin: 26px 0 30px;
+        display: none;
       }
 
       .panel-point {
@@ -1041,14 +1049,14 @@
         background: #f3fbf8;
       }
 
-      @keyframes rise {
+      @keyframes panel-slide {
         from {
-          opacity: 0;
-          transform: translateY(12px);
+          transform: translateY(-18px);
+          clip-path: inset(0 0 100% 0);
         }
         to {
-          opacity: 1;
           transform: translateY(0);
+          clip-path: inset(0 0 0 0);
         }
       }
 
@@ -1082,7 +1090,8 @@
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .tab-panel.is-active {
+        .tab-panel.is-active,
+        .tab-panel.is-collapsing {
           grid-template-columns: 1fr;
           gap: 30px;
         }
@@ -1092,6 +1101,16 @@
         .hero {
           padding-top: 72px;
           padding-bottom: 120px;
+        }
+
+        .hero h1 {
+          max-width: 90%;
+          font-size: 1.7rem !important;
+          line-height: 2rem !important;
+        }
+
+        .formats {
+          margin-top: 1rem;
         }
 
         .formats-shell {
@@ -1117,6 +1136,7 @@
           min-height: 300px;
           padding: 20px;
           border-radius: 26px;
+          display: none;
         }
 
         .tab-btn {
@@ -1124,7 +1144,15 @@
         }
 
         .tab-panel-wrap {
+          display: none;
           min-height: 0;
+          margin-top: 0;
+        }
+
+        .tab-list > .tab-panel.is-active,
+        .tab-list > .tab-panel.is-collapsing {
+          margin-top: -2px;
+          margin-bottom: 10px;
         }
 
         .phone-stage {
@@ -2353,9 +2381,102 @@
     <script>
       const tabs = document.querySelectorAll(".tab-btn");
       const panels = document.querySelectorAll(".tab-panel");
+      const tabList = document.querySelector(".tab-list");
+      const tabPanelWrap = document.querySelector(".tab-panel-wrap");
+      const panelOrder = Array.from(panels);
       const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
       const mobileNavPanel = document.querySelector(".mobile-nav-panel");
       const mobileNavLinks = document.querySelectorAll(".mobile-nav-panel a");
+      const isMobileTabLayout = () => window.innerWidth <= 720;
+      const panelSlideDuration = 560;
+      const panelCollapseTimers = new WeakMap();
+
+      const stopPanelCollapse = (panel) => {
+        const collapseTimer = panelCollapseTimers.get(panel);
+
+        if (collapseTimer) {
+          window.clearTimeout(collapseTimer);
+          panelCollapseTimers.delete(panel);
+        }
+
+        panel.classList.remove("is-collapsing");
+        panel.style.height = "";
+      };
+
+      const syncActivePanelPosition = (activeTab) => {
+        if (!tabList || !tabPanelWrap) return;
+
+        const activePanelId = activeTab?.dataset.tab;
+
+        panelOrder.forEach((panel) => {
+          if (isMobileTabLayout() && panel.id === activePanelId) {
+            activeTab.insertAdjacentElement("afterend", panel);
+            return;
+          }
+
+          tabPanelWrap.appendChild(panel);
+        });
+      };
+
+      const deactivateTabs = () => {
+        panels.forEach((panel) => {
+          stopPanelCollapse(panel);
+        });
+
+        tabs.forEach((item) => {
+          item.classList.remove("is-active");
+          item.setAttribute("aria-selected", "false");
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.remove("is-active");
+        });
+
+        syncActivePanelPosition(null);
+      };
+
+      const collapseTab = (tab) => {
+        const targetPanel = document.getElementById(tab.dataset.tab);
+
+        if (!targetPanel) {
+          deactivateTabs();
+          return;
+        }
+
+        tabs.forEach((item) => {
+          item.classList.remove("is-active");
+          item.setAttribute("aria-selected", "false");
+        });
+
+        stopPanelCollapse(targetPanel);
+        targetPanel.classList.remove("is-active");
+        targetPanel.classList.add("is-collapsing");
+        syncActivePanelPosition(tab);
+
+        targetPanel.style.height = `${targetPanel.scrollHeight}px`;
+        void targetPanel.offsetHeight;
+        targetPanel.style.height = "0px";
+
+        const collapseTimer = window.setTimeout(() => {
+          stopPanelCollapse(targetPanel);
+          syncActivePanelPosition(null);
+        }, panelSlideDuration);
+
+        panelCollapseTimers.set(targetPanel, collapseTimer);
+      };
+
+      const activateTab = (tab) => {
+        const targetId = tab.dataset.tab;
+
+        deactivateTabs();
+
+        tab.classList.add("is-active");
+        tab.setAttribute("aria-selected", "true");
+
+        const targetPanel = document.getElementById(targetId);
+        targetPanel.classList.add("is-active");
+        syncActivePanelPosition(tab);
+      };
 
       const closeMobileMenu = () => {
         if (!mobileMenuToggle || !mobileNavPanel) return;
@@ -2395,27 +2516,34 @@
           if (window.innerWidth > 980) {
             closeMobileMenu();
           }
+
+          const activeTab = document.querySelector(".tab-btn.is-active");
+
+          if (!isMobileTabLayout() && !activeTab && tabs[0]) {
+            activateTab(tabs[0]);
+            return;
+          }
+
+          syncActivePanelPosition(activeTab);
         });
       }
 
       tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
-          const targetId = tab.dataset.tab;
+          if (isMobileTabLayout() && tab.classList.contains("is-active")) {
+            collapseTab(tab);
+            return;
+          }
 
-          tabs.forEach((item) => {
-            item.classList.remove("is-active");
-            item.setAttribute("aria-selected", "false");
-          });
-
-          panels.forEach((panel) => {
-            panel.classList.remove("is-active");
-          });
-
-          tab.classList.add("is-active");
-          tab.setAttribute("aria-selected", "true");
-          document.getElementById(targetId).classList.add("is-active");
+          activateTab(tab);
         });
       });
+
+      if (isMobileTabLayout()) {
+        deactivateTabs();
+      } else {
+        activateTab(document.querySelector(".tab-btn.is-active") || tabs[0]);
+      }
     </script>
   </body>
 </html>
