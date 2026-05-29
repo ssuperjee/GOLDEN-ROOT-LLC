@@ -449,7 +449,6 @@
 
       .tab-btn:hover,
       .tab-btn:focus-visible {
-        transform: translateY(-2px);
         border-color: #8ddfce;
         outline: none;
       }
@@ -477,13 +476,14 @@
       .tab-panel.is-collapsing {
         display: grid;
         grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
-        transition: height 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+        pointer-events: none;
+        animation: panel-fade-out 0.26s ease forwards;
       }
 
       .tab-panel.is-active {
         display: grid;
         grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
-        animation: panel-slide 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+        animation: panel-fade-in 0.3s ease;
       }
 
       .phone-stage {
@@ -1049,14 +1049,25 @@
         background: #f3fbf8;
       }
 
-      @keyframes panel-slide {
+      @keyframes panel-fade-in {
         from {
-          transform: translateY(-18px);
-          clip-path: inset(0 0 100% 0);
+          opacity: 0;
+          transform: translateY(10px);
         }
         to {
+          opacity: 1;
           transform: translateY(0);
-          clip-path: inset(0 0 0 0);
+        }
+      }
+
+      @keyframes panel-fade-out {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(8px);
         }
       }
 
@@ -2388,19 +2399,28 @@
       const mobileNavPanel = document.querySelector(".mobile-nav-panel");
       const mobileNavLinks = document.querySelectorAll(".mobile-nav-panel a");
       const isMobileTabLayout = () => window.innerWidth <= 720;
-      const panelSlideDuration = 560;
-      const panelCollapseTimers = new WeakMap();
+      const panelFadeDuration = 260;
+      const panelCollapseHandlers = new WeakMap();
 
       const stopPanelCollapse = (panel) => {
-        const collapseTimer = panelCollapseTimers.get(panel);
+        const collapseHandler = panelCollapseHandlers.get(panel);
 
-        if (collapseTimer) {
-          window.clearTimeout(collapseTimer);
-          panelCollapseTimers.delete(panel);
+        if (collapseHandler) {
+          if (collapseHandler.timerId) {
+            window.clearTimeout(collapseHandler.timerId);
+          }
+
+          if (collapseHandler.onAnimationEnd) {
+            panel.removeEventListener(
+              "animationend",
+              collapseHandler.onAnimationEnd,
+            );
+          }
+
+          panelCollapseHandlers.delete(panel);
         }
 
         panel.classList.remove("is-collapsing");
-        panel.style.height = "";
       };
 
       const syncActivePanelPosition = (activeTab) => {
@@ -2453,16 +2473,30 @@
         targetPanel.classList.add("is-collapsing");
         syncActivePanelPosition(tab);
 
-        targetPanel.style.height = `${targetPanel.scrollHeight}px`;
-        void targetPanel.offsetHeight;
-        targetPanel.style.height = "0px";
-
-        const collapseTimer = window.setTimeout(() => {
+        const finishCollapse = () => {
           stopPanelCollapse(targetPanel);
           syncActivePanelPosition(null);
-        }, panelSlideDuration);
+        };
 
-        panelCollapseTimers.set(targetPanel, collapseTimer);
+        const onAnimationEnd = (event) => {
+          if (event.target !== targetPanel || event.animationName !== "panel-fade-out") {
+            return;
+          }
+
+          finishCollapse();
+        };
+
+        targetPanel.addEventListener("animationend", onAnimationEnd);
+
+        const timerId = window.setTimeout(
+          finishCollapse,
+          panelFadeDuration + 80,
+        );
+
+        panelCollapseHandlers.set(targetPanel, {
+          timerId,
+          onAnimationEnd,
+        });
       };
 
       const activateTab = (tab) => {
