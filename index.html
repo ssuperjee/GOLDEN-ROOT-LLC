@@ -1049,6 +1049,16 @@
         background: #f3fbf8;
       }
 
+      .site-footer p {
+        margin: 0;
+      }
+
+      .site-footer-address {
+        margin-top: 14px;
+        line-height: 1.75;
+        color: #516173;
+      }
+
       @keyframes panel-fade-in {
         from {
           opacity: 0;
@@ -2386,6 +2396,11 @@
     </main>
 
     <footer class="site-footer">
+      <p class="site-footer-address">
+        GOLDEN ROOT LLC <br/>
+        SOLE MBR 10749 STEEL RIDGE CT LAS VEGAS, NV
+        89135
+      </p>
       <p>GOLDEN ROOT LLC © 2026. All rights reserved.</p>
     </footer>
 
@@ -2479,7 +2494,10 @@
         };
 
         const onAnimationEnd = (event) => {
-          if (event.target !== targetPanel || event.animationName !== "panel-fade-out") {
+          if (
+            event.target !== targetPanel ||
+            event.animationName !== "panel-fade-out"
+          ) {
             return;
           }
 
