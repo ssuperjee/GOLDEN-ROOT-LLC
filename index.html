@@ -1117,7 +1117,7 @@
       }
 
       .site-footer {
-        padding: 28px 16px 36px;
+        padding: 34px 16px 42px;
         text-align: center;
         color: #6c7b8f;
         font-size: 0.92rem;
@@ -1132,6 +1132,23 @@
         margin-top: 14px;
         line-height: 1.75;
         color: #516173;
+      }
+
+      .site-footer-contact {
+        display: flex;
+        justify-content: center;
+        gap: 22px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        color: #5f6f82;
+      }
+
+      .site-footer-contact span {
+        display: inline-block;
+      }
+
+      .site-footer-copy {
+        margin-top: 14px !important;
       }
 
       @keyframes panel-fade-in {
@@ -1203,6 +1220,11 @@
           max-width: 90%;
           font-size: 1.7rem !important;
           line-height: 2rem !important;
+        }
+
+        .site-footer-contact {
+          flex-direction: column;
+          gap: 6px;
         }
 
         .hero-intro-grid {
@@ -2426,10 +2448,14 @@
 
     <footer class="site-footer">
       <p class="site-footer-address">
-        GOLDEN ROOT LLC <br />
+        <!-- GOLDEN ROOT LLC <br /> -->
         5420 Spring Mountain Rd #106a
       </p>
-      <p>GOLDEN ROOT LLC © 2026. All rights reserved.</p>
+      <div class="site-footer-contact">
+        <span>Email: wang@goldenroot.cc</span>
+        <span>Tel: +1 7027010271</span>
+      </div>
+      <p class="site-footer-copy">GOLDEN ROOT LLC © 2026. All rights reserved.</p>
     </footer>
 
     <script>
