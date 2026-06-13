@@ -328,6 +328,46 @@
         margin-top: 32px;
       }
 
+      .hero-intro-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+        margin-top: 42px;
+        text-align: left;
+      }
+
+      .hero-intro-card {
+        padding: 28px 26px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 18px 40px rgba(6, 73, 67, 0.16);
+        backdrop-filter: blur(10px);
+      }
+
+      .hero-intro-card h2 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero-intro-card h3 {
+        margin: 12px 0 0;
+        font-size: clamp(1.35rem, 2vw, 1.9rem);
+        line-height: 1.25;
+        font-weight: 800;
+      }
+
+      .hero-intro-card p {
+        max-width: none;
+        margin: 16px 0 0;
+        font-size: 0.98rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.86);
+      }
+
       .btn-primary,
       .btn-secondary {
         display: inline-flex;
@@ -1041,6 +1081,41 @@
         line-height: 1.8;
       }
 
+      .contact-grid {
+        display: flex;
+        justify-content: center;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+
+      .contact-card {
+        width: min(100%, 280px);
+        padding: 24px 24px 20px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 18px 40px rgba(6, 73, 67, 0.18);
+        backdrop-filter: blur(10px);
+      }
+
+      .contact-card img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.96);
+        padding: 10px;
+      }
+
+      .contact-card span {
+        display: block;
+        margin-top: 14px;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
       .site-footer {
         padding: 28px 16px 36px;
         text-align: center;
@@ -1128,6 +1203,27 @@
           max-width: 90%;
           font-size: 1.7rem !important;
           line-height: 2rem !important;
+        }
+
+        .hero-intro-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+          margin-top: 30px;
+        }
+
+        .hero-intro-card {
+          padding: 22px 18px;
+          border-radius: 22px;
+          text-align: left;
+        }
+
+        .hero-intro-card h3 {
+          font-size: 1.2rem;
+        }
+
+        .hero-intro-card p {
+          font-size: 0.94rem;
+          line-height: 1.75;
         }
 
         .formats {
@@ -1240,6 +1336,38 @@
           </p>
           <div class="cta-row">
             <a class="btn-primary" href="#join">Register</a>
+          </div>
+          <div class="hero-intro-grid">
+            <article class="hero-intro-card">
+              <h2>Who We Are</h2>
+              <h3>A Global Advertising Infrastructure Company</h3>
+              <p>
+                Aurora is an AI-driven marketing technology group dedicated to
+                providing infrastructure, intelligent analytics, and support to
+                help advertisers grow confidently within the global digital
+                ecosystem.
+              </p>
+              <p>
+                We integrate technology, data, and operational expertise to
+                help brands, agencies, and performance marketers scale
+                efficiently across multiple media platforms.
+              </p>
+            </article>
+            <article class="hero-intro-card">
+              <h2>What We Do</h2>
+              <h3>Helping Advertisers Achieve Global Scale</h3>
+              <p>
+                With our proprietary technology solutions, we offer an
+                integrated advertising infrastructure that streamlines access,
+                payment, optimization, and data visualization across multiple
+                media platforms.
+              </p>
+              <p>
+                Our ecosystem supports the entire lifecycle of digital
+                advertising operations, enabling clients to manage complex ad
+                placements within a single, unified environment.
+              </p>
+            </article>
           </div>
         </div>
         <div class="wave-divider hero-wave" aria-hidden="true">
@@ -2078,106 +2206,6 @@
                   <svg viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet">
                     <defs>
                       <linearGradient
-                        id="vpnBg"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#8df7cb"></stop>
-                        <stop offset="100%" stop-color="#2bb8a5"></stop>
-                      </linearGradient>
-                      <linearGradient
-                        id="vpnWifi"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#3251ff"></stop>
-                        <stop offset="100%" stop-color="#7e58ff"></stop>
-                      </linearGradient>
-                    </defs>
-                    <circle cx="32" cy="32" r="30" fill="url(#vpnBg)"></circle>
-                    <path
-                      d="M18 27C26 19.7 38 19.7 46 27"
-                      fill="none"
-                      stroke="url(#vpnWifi)"
-                      stroke-width="5"
-                      stroke-linecap="round"
-                    ></path>
-                    <path
-                      d="M22.5 33C28 28.3 36 28.3 41.5 33"
-                      fill="none"
-                      stroke="url(#vpnWifi)"
-                      stroke-width="5"
-                      stroke-linecap="round"
-                    ></path>
-                    <path
-                      d="M27.5 39C30.3 36.8 33.7 36.8 36.5 39"
-                      fill="none"
-                      stroke="url(#vpnWifi)"
-                      stroke-width="5"
-                      stroke-linecap="round"
-                    ></path>
-                    <circle cx="32" cy="45" r="4" fill="#ffffff"></circle>
-                  </svg>
-                </div>
-              </div>
-              <strong>VPN</strong>
-            </article>
-            <article class="vertical-card">
-              <div class="icon-badge">
-                <div class="vertical-illustration" aria-hidden="true">
-                  <svg viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                      <linearGradient
-                        id="gameBg"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#8bd7ff"></stop>
-                        <stop offset="100%" stop-color="#5968ff"></stop>
-                      </linearGradient>
-                      <linearGradient
-                        id="diceFill"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#8a7bff"></stop>
-                        <stop offset="100%" stop-color="#4054d8"></stop>
-                      </linearGradient>
-                    </defs>
-                    <circle cx="32" cy="32" r="30" fill="url(#gameBg)"></circle>
-                    <rect
-                      x="18"
-                      y="18"
-                      width="28"
-                      height="28"
-                      rx="6"
-                      transform="rotate(-12 32 32)"
-                      fill="url(#diceFill)"
-                    ></rect>
-                    <circle cx="25" cy="26" r="3" fill="#ffffff"></circle>
-                    <circle cx="39" cy="23" r="3" fill="#ffffff"></circle>
-                    <circle cx="32" cy="32" r="3" fill="#ffffff"></circle>
-                    <circle cx="25" cy="39" r="3" fill="#ffffff"></circle>
-                    <circle cx="39" cy="36" r="3" fill="#ffffff"></circle>
-                  </svg>
-                </div>
-              </div>
-              <strong>Gambling&amp;Betting</strong>
-            </article>
-            <article class="vertical-card">
-              <div class="icon-badge">
-                <div class="vertical-illustration" aria-hidden="true">
-                  <svg viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                      <linearGradient
                         id="cardBg"
                         x1="0%"
                         y1="0%"
@@ -2370,14 +2398,15 @@
           </svg>
         </div>
         <div class="container">
-          <h2 class="section-title">Join our platform</h2>
-          <div class="section-mark"></div>
-          <p>
-            Launch campaigns with flexible formats, broad global reach, and a
-            self-serve workflow designed to move from testing to scale quickly.
-          </p>
-          <div class="cta-row">
-            <a class="btn-primary" href="#top">Register</a>
+          <div class="contact-grid">
+            <div class="contact-card">
+              <img src="./img/tg.png" alt="Telegram contact QR code" />
+              <span>Telegram‌</span>
+            </div>
+            <div class="contact-card">
+              <img src="./img/whatapp.png" alt="WhatsApp contact QR code" />
+              <span>WhatsApp</span>
+            </div>
           </div>
         </div>
         <div class="section-wave-bottom" aria-hidden="true">
@@ -2398,7 +2427,7 @@
     <footer class="site-footer">
       <p class="site-footer-address">
         GOLDEN ROOT LLC <br />
-        5416 Spring Mountain Rd, Las Vegas, NV 89146, United States
+        5420 Spring Mountain Rd #106a
       </p>
       <p>GOLDEN ROOT LLC © 2026. All rights reserved.</p>
     </footer>
